@@ -2,6 +2,7 @@ package com.example.triviagame.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.StrictMode
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.example.triviagame.R
@@ -13,14 +14,10 @@ import java.io.IOException
 class MainActivity : AppCompatActivity() {
     val questionFagmentObject=QuestionFragment()
     lateinit var binding:ActivityMainBinding
-    lateinit var result:QuestionList
-    private val client=OkHttpClient()
-    private val url="https://opentdb.com/api.php?amount=10&category=10&difficulty=easy&type=multiple"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        makeRequest()
         addCallbacks()
     }
 
@@ -38,20 +35,6 @@ class MainActivity : AppCompatActivity() {
             binding.textWelcome.visibility=View.GONE
     }
 
-    private fun makeRequest() {
-        val request=Request.Builder().url(url).build()
-        client.newCall(request).enqueue(object :Callback{
-            override fun onFailure(call: Call, e: IOException) {
 
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                response.body?.string().let { jsonString ->
-                     result=Gson().fromJson(jsonString,QuestionList::class.java)
-                }
-            }
-
-        })
-    }
 
 }
